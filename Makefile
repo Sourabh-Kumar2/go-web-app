@@ -1,7 +1,7 @@
 .PHONY: build
 build:
 	rm -rf build/
-	go build -x -o build/ ./cmd/...
+	go build -o build/ ./cmd/...
 
 .PHONY: run
 run:

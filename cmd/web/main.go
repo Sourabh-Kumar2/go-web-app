@@ -55,11 +55,16 @@ var books = []book{
 func main() {
 	route := http.NewServeMux()
 	route.HandleFunc("/books", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(books)
-		if err != nil {
-			log.Fatal(err)
+		if r.Method == http.MethodGet {
+			w.Header().Set("Content-Type", "application/json")
+			handleErr(json.NewEncoder(w).Encode(books))
 		}
 	})
 	log.Fatal(http.ListenAndServe(":5111", route))
+}
+
+func handleErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }

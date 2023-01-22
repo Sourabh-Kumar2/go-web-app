@@ -8,7 +8,7 @@ import (
 type Route struct {
 	Method  string
 	Path    string
-	Handler http.HandlerFunc
+	Handler http.Handler
 }
 
 type Router struct {

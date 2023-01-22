@@ -55,23 +55,25 @@ var books = []book{
 
 func main() {
 	route := http.NewServeMux()
-	route.HandleFunc("/books", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if r.Method == http.MethodGet {
-			handleErr(json.NewEncoder(w).Encode(books))
-		}
-		if r.Method == http.MethodPost {
-			body, err := io.ReadAll(r.Body)
-			handleErr(err)
-			var b book
-			handleErr(json.Unmarshal(body, &b))
-			b.ID = int64(len(books) + 1)
-			books = append(books, b)
-			w.WriteHeader(http.StatusCreated)
-			handleErr(json.NewEncoder(w).Encode(b))
-		}
-	})
+	route.HandleFunc("/books", booksHandler)
 	log.Fatal(http.ListenAndServe(":5111", route))
+}
+
+func booksHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	if r.Method == http.MethodGet {
+		handleErr(json.NewEncoder(w).Encode(books))
+	}
+	if r.Method == http.MethodPost {
+		body, err := io.ReadAll(r.Body)
+		handleErr(err)
+		var b book
+		handleErr(json.Unmarshal(body, &b))
+		b.ID = int64(len(books) + 1)
+		books = append(books, b)
+		w.WriteHeader(http.StatusCreated)
+		handleErr(json.NewEncoder(w).Encode(b))
+	}
 }
 
 func handleErr(err error) {

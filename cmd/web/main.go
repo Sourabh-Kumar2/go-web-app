@@ -54,9 +54,9 @@ var books = []book{
 }
 
 func main() {
-	route := http.NewServeMux()
-	route.HandleFunc("/books", booksHandler)
-	log.Fatal(http.ListenAndServe(":5111", route))
+	router := NewRouter()
+	router.HandleFunc("/books", booksHandler)
+	log.Fatal(http.ListenAndServe(":5111", router))
 }
 
 func booksHandler(w http.ResponseWriter, r *http.Request) {

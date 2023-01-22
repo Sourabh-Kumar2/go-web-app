@@ -1,14 +1,23 @@
 package main
 
-import "net/http"
+import (
+	"github.com/gorilla/mux"
+	"net/http"
+)
+
+type Route struct {
+	Method  string
+	Path    string
+	Handler http.HandlerFunc
+}
 
 type Router struct {
-	mux *http.ServeMux
+	mux *mux.Router
 }
 
 func NewRouter() *Router {
 	return &Router{
-		mux: http.NewServeMux(),
+		mux: mux.NewRouter(),
 	}
 }
 
@@ -18,4 +27,8 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 func (r *Router) HandleFunc(pattern string, handler func(w http.ResponseWriter, r *http.Request)) {
 	r.mux.HandleFunc(pattern, handler)
+}
+
+func (r *Router) AddRoute(route Route) {
+	r.mux.NewRoute().Methods(route.Method).Path(route.Path).Handler(route.Handler)
 }
